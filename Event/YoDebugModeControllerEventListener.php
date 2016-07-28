@@ -53,7 +53,22 @@ class YoDebugModeControllerEventListener extends BcControllerEventListener {
 			}
 			
 			// 実行
-			Configure::write('debug', intval($Controller->siteConfigs[Configure::read('YoDebugMode.modeKeyName')]));
+			$mode = intval($Controller->siteConfigs[Configure::read('YoDebugMode.modeKeyName')]);
+			Configure::write('debug', $mode);
+			// DboSouceのfulldebug書き換え
+			$dbConfig = new DATABASE_CONFIG();
+			if (isset($dbConfig->baser)) {
+				$con = ConnectionManager::getDataSource("baser");
+				$con->fullDebug = Configure::read('debug') > 1;
+			}
+			if (isset($dbConfig->plugin)) {
+				$con = ConnectionManager::getDataSource("plugin");
+				$con->fullDebug = Configure::read('debug') > 1;
+			}
+			if (isset($dbConfig->test)) {
+				$con = ConnectionManager::getDataSource("test");
+				$con->fullDebug = Configure::read('debug') > 1;
+			}
 		}
 	}
 }
