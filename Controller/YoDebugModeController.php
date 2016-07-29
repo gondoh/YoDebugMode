@@ -45,6 +45,7 @@ class YoDebugModeController extends BcPluginAppController {
 						'name' => "YoDebugMode." . $target,
 						'value' => $this->request->data['YoDebugMode'][$target]
 					);
+					$this->SiteConfig->create();
 					$this->SiteConfig->save($data, false);
 				}
 			}
